@@ -85,7 +85,6 @@ using namespace std;
                     ofstream file("data.txt");
                     file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі"<<'\0' << endl;
                 }
-                file.close();
                 system("pause");
                 break;
             }
@@ -97,15 +96,20 @@ using namespace std;
             if (!WhiteKingExist(map))
             {
                 system("cls");
-                cout << "\n\n\tblack win\n\n" << endl;
-                system("pause");
-                break;
-                fstream file("data.txt", fstream::app);
+                cout << "\n\n\black win\n\n" << endl;
+                ofstream file("data.txt", fstream::app);
                 if (file.is_open())
                 {
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
+                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << '\0' << endl;
+                }
+                else
+                {
+                    ofstream file("data.txt");
+                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << '\0' << endl;
                 }
                 file.close();
+                system("pause");
+                break;
             }
         }
     }
