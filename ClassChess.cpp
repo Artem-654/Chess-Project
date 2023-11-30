@@ -3,20 +3,31 @@
 #include <windows.h>
 #include <string>
 #include <conio.h>
+#include <vector>
 #include "ClassChess.h"
 using namespace std;
     chess::chess()
     {
+        //    int a,b;
+       // while (true)
+       // {
+            //a = _getch();
+            //a = _getch();
+            //b = _getch();
+            //if (a == b)
+             //   cout << "true"<<endl;
+            //cout << a <<" "<<b << endl;
+            //cout << b << endl << hex << b << endl << (char)b << dec << endl;
+        //}
         menu(ChessMap);
     }
     void chess::menu(string(&map)[8][8])
     {
-        int n;
         while (true)
         {
             system("cls");
             cout << "\n Шахи\n\n1)Грати\n2)Істрія\n3)Вийти з гри\n\n>>";;
-            n = _getch();
+            int n = _getch();
             switch (n)
             {
             case 49:
@@ -81,7 +92,6 @@ using namespace std;
                 }
                 else
                 {
-                    file.close();
                     ofstream file("data.txt");
                     file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі"<<'\0' << endl;
                 }
@@ -236,11 +246,11 @@ using namespace std;
         }
         file.clear();
         file.seekg(0);
-        string* ptr = new string[size];
-        string* timeptr = new string[size];
-        string* name1ptr = new string[size];
-        string* name2ptr = new string[size];
-        string* whowinptr = new string[size];
+        vector<string> ptr(size);
+        vector<string> timeptr(size);
+        vector<string> name1ptr(size);
+        vector<string> name2ptr(size);
+        vector<string> whowinptr(size);
         size_t pos1;
         size_t pos2;
         for (int i = 0; i < size; i++)
@@ -259,14 +269,11 @@ using namespace std;
             pos2 = ptr[i].find(' ', pos1);
             whowinptr[i] = ptr[i].substr(pos1, pos2 - pos1);
         }
-        for (int i = 0; i < size; i++)
-            cout << "Дата: " << timeptr[count] << " Білі фігури: " << name1ptr[count] << " Чорні фігури: " << name2ptr[count] << " Перемогли: " << whowinptr[count] << endl << endl;
-        system("pause");
-        delete[] ptr;
-        delete[] timeptr;
-        delete[] name1ptr;
-        delete[] name2ptr;
-        delete[] whowinptr;
+       for (int i = 0; i < size; i++)
+       {
+          cout << "Дата: " << timeptr[i] << " Білі фігури: " << name1ptr[i] << " Чорні фігури: " << name2ptr[i] << " Перемогли: " << whowinptr[i] << endl;
+       }
+
     }
     bool chess::WhiteKingExist(string map[8][8])
     {
