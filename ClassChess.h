@@ -23,7 +23,6 @@ class chess
     };
 public:
 	 chess();
-     ~chess();
 void menu();
 void game(string(&map)[8][8]);
 void mapgen(string(&map)[8][8]);

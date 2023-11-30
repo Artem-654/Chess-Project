@@ -47,10 +47,6 @@ using namespace std;
             }
         }
     }
-    chess::~chess()
-    {
-
-    }
     void chess::game(string(&map)[8][8])
     {
         bool can;
@@ -60,7 +56,7 @@ using namespace std;
         getline(cin, name1);
         system("cls");
         cout << "Введіть ім'я_прізвище другого гравця  (чорні фігури)\n>>";
-        getline(cin, name2);;
+        getline(cin, name2);
         system("cls");
         cout << "Введіть дату День.Місяць.Рік\n>>";
         getline(cin, time);
