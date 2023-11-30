@@ -24,7 +24,7 @@ class chess
 public:
 	 chess();
      ~chess();
-void menu(string(&map)[8][8]);
+void menu();
 void game(string(&map)[8][8]);
 void mapgen(string(&map)[8][8]);
 void whitemove(string(&map)[8][8], bool& can);

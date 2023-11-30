@@ -19,20 +19,20 @@ using namespace std;
             //cout << a <<" "<<b << endl;
             //cout << b << endl << hex << b << endl << (char)b << dec << endl;
         //}
-        menu(ChessMap);
+        menu();
     }
-    void chess::menu(string(&map)[8][8])
+    void chess::menu()
     {
         while (true)
         {
             system("cls");
-            cout << "\n Шахи\n\n1)Грати\n2)Істрія\n3)Вийти з гри\n\n>>";;
+            cout << "\n Шахи\n\n1)Грати\n2)Істрія\n3)Вийти з гри\n\n>>";
             int n = _getch();
             switch (n)
             {
             case 49:
             {
-                game(map);
+                game(ChessMap);
                 break;
             }
             case 50:
@@ -53,24 +53,14 @@ using namespace std;
     }
     void chess::game(string(&map)[8][8])
     {
-        UINT originalInputCP = GetConsoleCP();
-        UINT originalOutputCP = GetConsoleOutputCP();
         bool can;
         string name1, name2, time;
         system("cls");
         cout << "Введіть ім'я_прізвище першого гравця (білі фігури)\n>>";
-        SetConsoleCP(1251);
-        SetConsoleOutputCP(1251);
         getline(cin, name1);
-        SetConsoleCP(originalInputCP);
-        SetConsoleOutputCP(originalOutputCP);
         system("cls");
         cout << "Введіть ім'я_прізвище другого гравця  (чорні фігури)\n>>";
-        SetConsoleCP(1251);
-        SetConsoleOutputCP(1251);
-        getline(cin, name2);
-        SetConsoleCP(originalInputCP);
-        SetConsoleOutputCP(originalOutputCP);
+        getline(cin, name2);;
         system("cls");
         cout << "Введіть дату День.Місяць.Рік\n>>";
         getline(cin, time);
