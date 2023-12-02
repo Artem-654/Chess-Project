@@ -4,30 +4,28 @@
 #include <string>
 #include <conio.h>
 #include <vector>
+#include <algorithm>
 #include "ClassChess.h"
 using namespace std;
     chess::chess()
     {
-        //    int a,b;
-       // while (true)
-       // {
-            //a = _getch();
-            //a = _getch();
-            //b = _getch();
-            //if (a == b)
-             //   cout << "true"<<endl;
-            //cout << a <<" "<<b << endl;
-            //cout << b << endl << hex << b << endl << (char)b << dec << endl;
+        //int a,b;
+        //while (true)
+        //{
+        //    a = _getch();
+        //    b = _getch();
+        //    cout << (int)a <<" "<< b << endl;
         //}
         menu();
     }
     void chess::menu()
     {
-        while (true)
+        int n;
+        do
         {
             system("cls");
             cout << "\n Шахи\n\n1)Грати\n2)Істрія\n3)Вийти з гри\n\n>>";
-            int n = _getch();
+            n = _getch();
             switch (n)
             {
             case 49:
@@ -40,12 +38,8 @@ using namespace std;
                 history();
                 break;
             }
-            case 51:
-            {
-                break;
             }
-            }
-        }
+        } while (n != 51);
     }
     void chess::game(string(&map)[8][8])
     {
@@ -74,12 +68,12 @@ using namespace std;
                 ofstream file("data.txt", fstream::app);
                 if (file.is_open())
                 {
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі" << '\0' << endl;
+                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
                 }
                 else
                 {
                     ofstream file("data.txt");
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі"<<'\0' << endl;
+                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
                 }
                 system("pause");
                 break;
@@ -92,16 +86,16 @@ using namespace std;
             if (!WhiteKingExist(map))
             {
                 system("cls");
-                cout << "\n\n\black win\n\n" << endl;
-                ofstream file("data.txt", fstream::app);
+                cout << "\n\n\tblack win\n\n" << endl;
+                ofstream file("data.txt", fstream::app); 
                 if (file.is_open())
                 {
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << '\0' << endl;
+                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
                 }
                 else
                 {
                     ofstream file("data.txt");
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << '\0' << endl;
+                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
                 }
                 file.close();
                 system("pause");
@@ -222,11 +216,12 @@ using namespace std;
         ifstream file("data.txt");
         if (!file.is_open())
         {
+            cout << "Помилка відкриття";
             return;
         }
-        int count=0, count2 = 1,size = 0;
-        string line;
-        while (getline(file, line))
+        int size = 0;
+        string tempstr2;
+        while (getline(file, tempstr2))
         {
             size++;
         }
@@ -237,10 +232,10 @@ using namespace std;
         vector<string> name1ptr(size);
         vector<string> name2ptr(size);
         vector<string> whowinptr(size);
-        size_t pos1;
-        size_t pos2;
         for (int i = 0; i < size; i++)
         {
+            size_t pos1;
+            size_t pos2;
             getline(file, ptr[i]);
             pos1 = 0;
             pos2 = ptr[i].find(' ');
@@ -255,11 +250,81 @@ using namespace std;
             pos2 = ptr[i].find(' ', pos1);
             whowinptr[i] = ptr[i].substr(pos1, pos2 - pos1);
         }
-       for (int i = 0; i < size; i++)
-       {
-          cout << "Дата: " << timeptr[i] << " Білі фігури: " << name1ptr[i] << " Чорні фігури: " << name2ptr[i] << " Перемогли: " << whowinptr[i] << endl;
-       }
+        int n;
+        do
+        {
+            system("cls");
+            for (int i = 0; i < size; i++)
+            {
+               cout << "\nДата: " << timeptr[i] << " Білі фігури: " << name1ptr[i] << " Чорні фігури: " << name2ptr[i] << " Перемогли: " << whowinptr[i] << endl;
+            }
+            cout <<"\n1)Сортування за датою\n2)Пошук за ім'ям\n3)Вийти\n\n>>";
+            n = _getch();
+            switch (n)
+            {
+            case 49:
+            {
+                sort(timeptr.begin(), timeptr.end(), [](string a, string b) { //lambda function
+                        return a > b; 
+                    });
+                break;
+            }
+            case 50:
+            {
+                string tempstr1;
+                do
+                {
+                    system("cls");
+                    cout << "\n1)Гравець за білих\n2)Гравець за чорних\n3)Вийти\n\n>>";
+                    n = _getch();
+                    switch (n)
+                    {
+                    case 49:
+                        tempstr1 = {};
+                        do
+                        {
+                            system("cls");
+                            cout << "\n>>";
+                            cout << tempstr1;
+                            n = _getch();
+                            if (n == 8 && !(tempstr1.empty()))
+                            { 
+                                tempstr1.pop_back();
+                                continue;
+                            }
+                            if (n == 8 && tempstr1.empty())
+                                continue;
+                            if(n == 13)
+                                continue;
 
+                            cout <<(char)n<<endl;
+                            tempstr1 += n;
+                            for (int i = 0; i < size; i++)
+                            {
+                                tempstr2 = {};
+                                for (int j = 0; j < name1ptr[i].length(); j++)
+                                {
+                                    tempstr2 += name1ptr[i][j];
+                                    if (tempstr1 == tempstr2)
+                                    {
+                                        cout << "\n\nДата: " << timeptr[i] << " Білі фігури: " << name1ptr[i] << " Чорні фігури: " << name2ptr[i] << " Перемогли: " << whowinptr[i];
+                                        break;
+                                    }
+                                }
+                            }
+                            cout << "\n\n";
+                            system("pause");
+                        } while (n != 27);
+                        break;
+                    case 50:
+
+                        break;
+                    }
+                } while (n != 51);
+                break;
+            }
+            }
+        } while (n != 51);
     }
     bool chess::WhiteKingExist(string map[8][8])
     {
