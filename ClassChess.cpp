@@ -317,7 +317,41 @@ using namespace std;
                         } while (n != 27);
                         break;
                     case 50:
+                        tempstr1 = {};
+                        do
+                        {
+                            system("cls");
+                            cout << "\n>>";
+                            cout << tempstr1;
+                            n = _getch();
+                            if (n == 8 && !(tempstr1.empty()))
+                            {
+                                tempstr1.pop_back();
+                                continue;
+                            }
+                            if (n == 8 && tempstr1.empty())
+                                continue;
+                            if (n == 13)
+                                continue;
 
+                            cout << (char)n << endl;
+                            tempstr1 += n;
+                            for (int i = 0; i < size; i++)
+                            {
+                                tempstr2 = {};
+                                for (int j = 0; j < name2ptr[i].length(); j++)
+                                {
+                                    tempstr2 += name2ptr[i][j];
+                                    if (tempstr1 == tempstr2)
+                                    {
+                                        cout << "\n\nДата: " << timeptr[i] << " Білі фігури: " << name1ptr[i] << " Чорні фігури: " << name2ptr[i] << " Перемогли: " << whowinptr[i];
+                                        break;
+                                    }
+                                }
+                            }
+                            cout << "\n\n";
+                            system("pause");
+                        } while (n != 27);
                         break;
                     }
                 } while (n != 51);
