@@ -9,13 +9,6 @@
 using namespace std;
     chess::chess()
     {
-        //int a,b;
-        //while (true)
-        //{
-        //    a = _getch();
-        //    b = _getch();
-        //    cout << (int)a <<" "<< b << endl;
-        //}
         menu();
     }
     void chess::menu()
@@ -24,7 +17,7 @@ using namespace std;
         do
         {
             system("cls");
-            cout << "\n Шахи\n\n1)Грати\n2)Істрія\n3)Вийти з гри\n\n>>";
+            cout << "\n Шахи\n\n1)Грати\n2)Історія\n3)Вийти з гри\n\n>>";
             n = _getch();
             switch (n)
             {
@@ -44,7 +37,7 @@ using namespace std;
     void chess::game(string(&map)[8][8])
     {
         bool can;
-        string name1, name2, time;
+        string name1, name2;
         system("cls");
         cout << "Введіть ім'я_прізвище першого гравця (білі фігури)\n>>";
         getline(cin, name1);
@@ -52,50 +45,79 @@ using namespace std;
         cout << "Введіть ім'я_прізвище другого гравця  (чорні фігури)\n>>";
         getline(cin, name2);
         system("cls");
-        cout << "Введіть дату День.Місяць.Рік\n>>";
-        getline(cin, time);
         while (true)
         {
             can = false;
             do {
-            mapgen(map);
-            whitemove(map,can);
+                mapgen(map);
+                whitemove(map,can);
             } while (!can);
             if (!BlackKingExist(map))
             {
                 system("cls");
-                cout << "\n\n\twhite win\n\n" << endl;
+                cout << "\n\n\tБілі перемогли\n\n" << endl;
                 ofstream file("data.txt", fstream::app);
-                if (file.is_open())
+                SYSTEMTIME systemtime;
+                GetLocalTime(&systemtime);
+                if (systemtime.wDay<10)
                 {
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
+                    if (systemtime.wMonth < 10)
+                    {
+                        file << systemtime.wYear << ".0" << systemtime.wMonth << ".0" << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
+                    }
+                    else
+                    {
+                        file << systemtime.wYear << "." << systemtime.wMonth << ".0" << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
+                    }
                 }
                 else
                 {
-                    ofstream file("data.txt");
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
+                    if (systemtime.wMonth < 10)
+                    {
+                        file << systemtime.wYear << ".0" << systemtime.wMonth << "." << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
+                    }
+                    else
+                    {
+                        file << systemtime.wYear << "." << systemtime.wMonth << "." << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "білі" << endl;
+                    }
                 }
+                file.close();
                 system("pause");
                 break;
             }
             can = false;
             do {
-            mapgen(map);
-            blackmove(map, can);
+                mapgen(map);
+                blackmove(map, can);
             } while (!can);
             if (!WhiteKingExist(map))
             {
                 system("cls");
-                cout << "\n\n\tblack win\n\n" << endl;
+                cout << "\n\n\tЧорні перемогли\n\n" << endl;
                 ofstream file("data.txt", fstream::app); 
-                if (file.is_open())
+                SYSTEMTIME systemtime;
+                GetLocalTime(&systemtime);
+                if (systemtime.wDay < 10)
                 {
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
+                    if (systemtime.wMonth < 10)
+                    {
+                        file << systemtime.wYear << ".0" << systemtime.wMonth << ".0" << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
+                    }
+                    else
+                    {
+                        file << systemtime.wYear << "." << systemtime.wMonth << ".0" << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
+                    }
                 }
                 else
                 {
-                    ofstream file("data.txt");
-                    file << time << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
+                    if (systemtime.wMonth < 10)
+                    {
+                        file << systemtime.wYear << ".0" << systemtime.wMonth << "." << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
+                    }
+                    else
+                    {
+                        file << systemtime.wYear << "." << systemtime.wMonth << "." << systemtime.wDay << ' ' << name1 << ' ' << name2 << ' ' << "чорні" << endl;
+                    }
                 }
                 file.close();
                 system("pause");
@@ -225,8 +247,8 @@ using namespace std;
         {
             size++;
         }
-        file.clear();
-        file.seekg(0);
+        file.clear();//clear the state flags of a file stream
+        file.seekg(0);//set the position of the get pointer(read pointer) in the file stream to the beginning
         vector<string> ptr(size);
         vector<string> timeptr(size);
         vector<string> name1ptr(size);
