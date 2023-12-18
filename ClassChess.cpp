@@ -123,8 +123,8 @@ using namespace std;
                 break;
             }
         }
-    }
-    void chess::mapgen()
+    } 
+    void chess::mapgen() const
     {
         system("cls");
         cout << "   A  B  C  D  E  F  G  H " << endl;
@@ -143,7 +143,6 @@ using namespace std;
     }
     void chess::whitemove()
     {
-        int beginmoveX, beginmoveY, endmoveX, endmoveY;
         cout << "Хід білих" << endl;
         cout << "Введіть букву та цифру\nзвідки ви хочете піти,\nа потім куди" << endl << ">>";
         do
@@ -173,22 +172,30 @@ using namespace std;
         endmoveY = endmoveY - 48;
         cout << endmoveY;
         endmoveY = 8 - endmoveY;
-        if (whiteposible(beginmoveY, beginmoveX, endmoveY, endmoveX))
+        if (whiteposible())
         {
-            can = true;
+            if (ChessMap[beginmoveY][beginmoveX] == whiterook)
+            {
+                if ((beginmoveX == 0) && (beginmoveY == 7))
+                    whiterookleftmove = true;
+                else if ((beginmoveX == 7) && (beginmoveY == 7))
+                    whiterookrightmove = true;
+            }
+            if (ChessMap[beginmoveY][beginmoveX] == whiteking)
+                whitekingmove = true;
             ChessMap[endmoveY][endmoveX] = ChessMap[beginmoveY][beginmoveX];
             ChessMap[beginmoveY][beginmoveX] = empty;
+            oldbeginmoveX = beginmoveX, oldbeginmoveY = beginmoveY, oldendmoveX = endmoveX, oldendmoveY = endmoveY;
+            can = true;
         }
         else
         {
-            can = false;
             cout << " Неможливий хід!" << endl;
             Sleep(2000);
         }
     }
     void chess::blackmove()
     {
-        int beginmoveX, beginmoveY, endmoveX, endmoveY;
         cout << "Хід чорних" << endl;
         cout << "Введіть букву та цифру\nзвідки ви хочете піти,\nа потім куди" << endl << ">>";
         do
@@ -218,15 +225,24 @@ using namespace std;
         endmoveY = endmoveY - 48;
         cout << endmoveY;
         endmoveY = 8 - endmoveY;
-        if (blackposible(beginmoveY, beginmoveX, endmoveY, endmoveX))
+        if (blackposible())
         {
-            can = true;
+            if (ChessMap[beginmoveY][beginmoveX] == blackrook)
+            {
+                if ((beginmoveX == 0) && (beginmoveY = 0))
+                    blackrookleftmove = true;
+                else if ((beginmoveX == 7) && (beginmoveY = 0))
+                    blackrookrightmove = true;
+            }
+            if (ChessMap[beginmoveY][beginmoveX] == blackking)
+                blackkingmove = true;
             ChessMap[endmoveY][endmoveX] = ChessMap[beginmoveY][beginmoveX];
             ChessMap[beginmoveY][beginmoveX] = empty;
+            oldbeginmoveX = beginmoveX, oldbeginmoveY = beginmoveY, oldendmoveX = endmoveX, oldendmoveY = endmoveY;
+            can = true;
         }
         else
         {
-            can = false;
             cout << " Неможливий хід!" << endl;
             Sleep(2000);
         }
@@ -431,7 +447,7 @@ using namespace std;
             return false;
         }
     }
-    bool chess::whiteposible(int beginmoveY, int beginmoveX, int endmoveY, int endmoveX)
+    bool chess::whiteposible()
     {
         if (beginmoveY == endmoveY && beginmoveX == endmoveX)
         {
@@ -480,9 +496,13 @@ using namespace std;
                 }
                 return true;
             }
+            if ((ChessMap[oldendmoveY][oldendmoveX] == blackpawn) && (beginmoveY - 1 == endmoveY && (beginmoveX - 1 == endmoveX || beginmoveX + 1 == endmoveX)) && (oldbeginmoveY + 2 == oldendmoveY) && ((oldendmoveX + 1 == beginmoveX) || (oldendmoveX - 1 == beginmoveX)))
+            {
+                ChessMap[oldendmoveY][oldendmoveX] = empty;
+                return true;
+            }
             if ((beginmoveY - 1 == endmoveY && (beginmoveX - 1 == endmoveX  || beginmoveX + 1 == endmoveX)) && black(ChessMap[endmoveY][endmoveX]))//check on attack move
             {
-
                 if (beginmoveY == 1 && endmoveY == 0)
                 {
                     int tempnum;
@@ -509,10 +529,26 @@ using namespace std;
                         return true;
                     }
                 }
+                return true;
             }
         }
         if (ChessMap[beginmoveY][beginmoveX] == whiteking)
         {
+            if (!whitekingmove)
+            {
+                if ((!whiterookleftmove) && ((beginmoveX - 2) == endmoveX) && (ChessMap[beginmoveY][beginmoveX - 1] == empty) && (ChessMap[beginmoveY][beginmoveX - 2] == empty) && (ChessMap[beginmoveY][beginmoveX - 3] == empty))
+                {
+                    ChessMap[7][0] = empty;
+                    ChessMap[7][3] = whiterook;
+                    return true;
+                }
+                if ((!whiterookrightmove) && ((beginmoveX + 2) == endmoveX) && (ChessMap[beginmoveY][beginmoveX + 1] == empty) && (ChessMap[beginmoveY][beginmoveX + 2] == empty))
+                {
+                    ChessMap[7][7] = empty;
+                    ChessMap[7][5] = whiterook;
+                    return true;
+                }
+            }
             return abs(beginmoveY - endmoveY) <= 1 && abs(beginmoveX - endmoveX) <= 1;
         }
         if (ChessMap[beginmoveY][beginmoveX] == whitequeen)
@@ -837,7 +873,7 @@ using namespace std;
         }
         return false;
     }
-    bool chess::blackposible(int beginmoveY, int beginmoveX, int endmoveY, int endmoveX)
+    bool chess::blackposible()
     {
         if (beginmoveY == endmoveY && beginmoveX == endmoveX)
         {
@@ -886,7 +922,12 @@ using namespace std;
                 }
                 return true;
             }
-            if ((beginmoveY + 1 == endmoveY && (beginmoveX - 1 == endmoveX || beginmoveX + 1 == endmoveX)) && black(ChessMap[endmoveY][endmoveX]))//attack move
+            if ((ChessMap[oldendmoveY][oldendmoveX] == whitepawn) && (beginmoveY + 1 == endmoveY && (beginmoveX - 1 == endmoveX || beginmoveX + 1 == endmoveX)) && (oldbeginmoveY - 2 == oldendmoveY) && ((oldendmoveX + 1 == beginmoveX) || (oldendmoveX - 1 == beginmoveX)))
+            {
+                ChessMap[oldendmoveY][oldendmoveX] = empty;
+                return true;
+            }
+            if ((beginmoveY + 1 == endmoveY && (beginmoveX - 1 == endmoveX || beginmoveX + 1 == endmoveX)) && white(ChessMap[endmoveY][endmoveX]))//attack move
             {
 
                 if (beginmoveY == 6 && endmoveY == 7)
@@ -915,10 +956,26 @@ using namespace std;
                         return true;
                     }
                 }
+                return true;
             }
         }
         if (ChessMap[beginmoveY][beginmoveX] == blackking)
         {
+            if (!blackkingmove)
+            {
+                if ((!blackrookleftmove) && ((beginmoveX - 2) == endmoveX) && (ChessMap[beginmoveY][beginmoveX - 1] == empty) && (ChessMap[beginmoveY][beginmoveX - 2] == empty) && (ChessMap[beginmoveY][beginmoveX - 3] == empty))
+                {
+                    ChessMap[0][0] = empty;
+                    ChessMap[0][3] = whiterook;
+                    return true;
+                }
+                if ((!blackrookrightmove) && ((beginmoveX + 2) == endmoveX) && (ChessMap[beginmoveY][beginmoveX + 1] == empty) && (ChessMap[beginmoveY][beginmoveX + 2] == empty))
+                {
+                    ChessMap[0][7] = empty;
+                    ChessMap[0][5] = whiterook;
+                    return true;
+                }
+            }
             return abs(beginmoveY - endmoveY) <= 1 && abs(beginmoveX - endmoveX) <= 1;
         }
         if (ChessMap[beginmoveY][beginmoveX] == blackqueen)
