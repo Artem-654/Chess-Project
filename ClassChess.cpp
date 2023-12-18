@@ -23,7 +23,7 @@ using namespace std;
             {
             case 49:
             {
-                game(ChessMap);
+                game();
                 break;
             }
             case 50:
@@ -34,9 +34,8 @@ using namespace std;
             }
         } while (n != 51);
     }
-    void chess::game(string(&map)[8][8])
+    void chess::game()
     {
-        bool can;
         string name1, name2;
         system("cls");
         cout << "Введіть ім'я_прізвище першого гравця (білі фігури)\n>>";
@@ -49,10 +48,10 @@ using namespace std;
         {
             can = false;
             do {
-                mapgen(map);
-                whitemove(map,can);
+                mapgen();
+                whitemove();
             } while (!can);
-            if (!BlackKingExist(map))
+            if (!BlackKingExist())
             {
                 system("cls");
                 cout << "\n\n\tБілі перемогли\n\n" << endl;
@@ -87,10 +86,10 @@ using namespace std;
             }
             can = false;
             do {
-                mapgen(map);
-                blackmove(map, can);
+                mapgen();
+                blackmove();
             } while (!can);
-            if (!WhiteKingExist(map))
+            if (!WhiteKingExist())
             {
                 system("cls");
                 cout << "\n\n\tЧорні перемогли\n\n" << endl;
@@ -125,7 +124,7 @@ using namespace std;
             }
         }
     }
-    void chess::mapgen(string(&map)[8][8])
+    void chess::mapgen()
     {
         system("cls");
         cout << "   A  B  C  D  E  F  G  H " << endl;
@@ -133,7 +132,7 @@ using namespace std;
         for (int i  = 0; i < 8; i++)
         {
             cout << " " << 8 - i;
-            cout << "│" << map[i][0] << "│" << map[i][1] << "│" << map[i][2] << "│" << map[i][3] << "│" << map[i][4] << "│" << map[i][5] << "│" << map[i][6] << "│" << map[i][7] << "│";
+            cout << "│" << ChessMap[i][0] << "│" << ChessMap[i][1] << "│" << ChessMap[i][2] << "│" << ChessMap[i][3] << "│" << ChessMap[i][4] << "│" << ChessMap[i][5] << "│" << ChessMap[i][6] << "│" << ChessMap[i][7] << "│";
             cout << " " << 8 - i << endl;
             if (i == 7)
                 break;
@@ -142,7 +141,7 @@ using namespace std;
         cout << "  └──┴──┴──┴──┴──┴──┴──┴──┘" << endl;
         cout << "   A  B  C  D  E  F  G  H " << endl;
     }
-    void chess::whitemove(string(&map)[8][8], bool& can)
+    void chess::whitemove()
     {
         int beginmoveX, beginmoveY, endmoveX, endmoveY;
         cout << "Хід білих" << endl;
@@ -174,11 +173,11 @@ using namespace std;
         endmoveY = endmoveY - 48;
         cout << endmoveY;
         endmoveY = 8 - endmoveY;
-        if (whiteposible(map, beginmoveY, beginmoveX, endmoveY, endmoveX))
+        if (whiteposible(beginmoveY, beginmoveX, endmoveY, endmoveX))
         {
             can = true;
-            map[endmoveY][endmoveX] = map[beginmoveY][beginmoveX];
-            map[beginmoveY][beginmoveX] = empty;
+            ChessMap[endmoveY][endmoveX] = ChessMap[beginmoveY][beginmoveX];
+            ChessMap[beginmoveY][beginmoveX] = empty;
         }
         else
         {
@@ -187,7 +186,7 @@ using namespace std;
             Sleep(2000);
         }
     }
-    void chess::blackmove(string(&map)[8][8], bool& can)
+    void chess::blackmove()
     {
         int beginmoveX, beginmoveY, endmoveX, endmoveY;
         cout << "Хід чорних" << endl;
@@ -219,11 +218,11 @@ using namespace std;
         endmoveY = endmoveY - 48;
         cout << endmoveY;
         endmoveY = 8 - endmoveY;
-        if (blackposible(map, beginmoveY, beginmoveX, endmoveY, endmoveX))
+        if (blackposible(beginmoveY, beginmoveX, endmoveY, endmoveX))
         {
             can = true;
-            map[endmoveY][endmoveX] = map[beginmoveY][beginmoveX];
-            map[beginmoveY][beginmoveX] = empty;
+            ChessMap[endmoveY][endmoveX] = ChessMap[beginmoveY][beginmoveX];
+            ChessMap[beginmoveY][beginmoveX] = empty;
         }
         else
         {
@@ -382,13 +381,13 @@ using namespace std;
             }
         } while (n != 51);
     }
-    bool chess::WhiteKingExist(string map[8][8])
+    bool chess::WhiteKingExist()
     {
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if (map[i][j] == whiteking)
+                if (ChessMap[i][j] == whiteking)
                 {
                     return true;
                 }
@@ -396,13 +395,13 @@ using namespace std;
         }
         return false;
     }
-    bool chess::BlackKingExist(string map[8][8])
+    bool chess::BlackKingExist()
     {
         for (int i = 0 ;i < 8;i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if (map[i][j] == blackking)
+                if (ChessMap[i][j] == blackking)
                 {
                     return true;
                 }
@@ -432,27 +431,27 @@ using namespace std;
             return false;
         }
     }
-    bool chess::whiteposible(string(&map)[8][8], int beginmoveY, int beginmoveX, int endmoveY, int endmoveX)
+    bool chess::whiteposible(int beginmoveY, int beginmoveX, int endmoveY, int endmoveX)
     {
         if (beginmoveY == endmoveY && beginmoveX == endmoveX)
         {
             return false;
         }
-        if (white(map[endmoveY][endmoveX]))
+        if (white(ChessMap[endmoveY][endmoveX]))
         {
             return false;
         }
-        if (!white(map[beginmoveY][beginmoveX]))
+        if (!white(ChessMap[beginmoveY][beginmoveX]))
         {
             return false;
         }
-        if (map[beginmoveY][beginmoveX] == whitepawn)
+        if (ChessMap[beginmoveY][beginmoveX] == whitepawn)
         {
-            if (beginmoveY == 6 && map[beginmoveY - 1][beginmoveX] == empty && map[beginmoveY - 2][beginmoveX] == empty && beginmoveY - 2 == endmoveY && beginmoveX == endmoveX)
+            if (beginmoveY == 6 && ChessMap[beginmoveY - 1][beginmoveX] == empty && ChessMap[beginmoveY - 2][beginmoveX] == empty && beginmoveY - 2 == endmoveY && beginmoveX == endmoveX)
             {
                 return true;
             }
-            if (map[beginmoveY - 1][beginmoveX] == empty && beginmoveY - 1 == endmoveY && beginmoveX == endmoveX)
+            if (ChessMap[beginmoveY - 1][beginmoveX] == empty && beginmoveY - 1 == endmoveY && beginmoveX == endmoveX)
             {
                 if (beginmoveY == 1 && endmoveY == 0)
                 {
@@ -466,22 +465,22 @@ using namespace std;
                     switch (tempnum)
                     {
                     case 1:
-                        map[beginmoveY][beginmoveX] = whitequeen;
+                        ChessMap[beginmoveY][beginmoveX] = whitequeen;
                         return true;
                     case 2:
-                        map[beginmoveY][beginmoveX] = whiterook;
+                        ChessMap[beginmoveY][beginmoveX] = whiterook;
                         return true;
                     case 3:
-                        map[beginmoveY][beginmoveX] = whitebishop;
+                        ChessMap[beginmoveY][beginmoveX] = whitebishop;
                         return true;
                     case 4:
-                        map[beginmoveY][beginmoveX] = whiteknight;
+                        ChessMap[beginmoveY][beginmoveX] = whiteknight;
                         return true;
                     }
                 }
                 return true;
             }
-            if ((beginmoveY - 1 == endmoveY && (beginmoveX - 1 == endmoveX  || beginmoveX + 1 == endmoveX)) && black(map[endmoveY][endmoveX]))//check on attack move
+            if ((beginmoveY - 1 == endmoveY && (beginmoveX - 1 == endmoveX  || beginmoveX + 1 == endmoveX)) && black(ChessMap[endmoveY][endmoveX]))//check on attack move
             {
 
                 if (beginmoveY == 1 && endmoveY == 0)
@@ -497,26 +496,26 @@ using namespace std;
                     switch (tempnum)
                     {
                     case 1:
-                        map[beginmoveY][beginmoveX] = whitequeen;
+                        ChessMap[beginmoveY][beginmoveX] = whitequeen;
                         return true;
                     case 2:
-                        map[beginmoveY][beginmoveX] = whiterook;
+                        ChessMap[beginmoveY][beginmoveX] = whiterook;
                         return true;
                     case 3:
-                        map[beginmoveY][beginmoveX] = whitebishop;
+                        ChessMap[beginmoveY][beginmoveX] = whitebishop;
                         return true;
                     case 4:
-                        map[beginmoveY][beginmoveX] = whiteknight;
+                        ChessMap[beginmoveY][beginmoveX] = whiteknight;
                         return true;
                     }
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == whiteking)
+        if (ChessMap[beginmoveY][beginmoveX] == whiteking)
         {
             return abs(beginmoveY - endmoveY) <= 1 && abs(beginmoveX - endmoveX) <= 1;
         }
-        if (map[beginmoveY][beginmoveX] == whitequeen)
+        if (ChessMap[beginmoveY][beginmoveX] == whitequeen)
         {
             if (beginmoveY == endmoveY || beginmoveX == endmoveX)//rook move
             {
@@ -526,11 +525,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (black(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
+                            if (black(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY - i][beginmoveX] == empty))
+                            if (!(ChessMap[beginmoveY - i][beginmoveX] == empty))
                             {
                                 return false;
                             }
@@ -541,11 +540,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (black(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
+                            if (black(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY + i][beginmoveX] == empty))
+                            if (!(ChessMap[beginmoveY + i][beginmoveX] == empty))
                             {
                                 return false;
                             }
@@ -560,11 +559,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveX - endmoveX); i++)
                         {
-                            if (black(map[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
+                            if (black(ChessMap[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY][beginmoveX + i] == empty))
+                            if (!(ChessMap[beginmoveY][beginmoveX + i] == empty))
                             {
                                 return false;
                             }
@@ -575,11 +574,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (black(map[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
+                            if (black(ChessMap[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY][beginmoveX - i] == empty))
+                            if (!(ChessMap[beginmoveY][beginmoveX - i] == empty))
                             {
                                 return false;
                             }
@@ -600,11 +599,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (black(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
+                            if (black(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY - i][beginmoveX + i] == empty))
+                            if (!(ChessMap[beginmoveY - i][beginmoveX + i] == empty))
                             {
                                 return false;
                             }
@@ -619,11 +618,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (black(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
+                            if (black(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY - i][beginmoveX - i] == empty))
+                            if (!(ChessMap[beginmoveY - i][beginmoveX - i] == empty))
                             {
                                 return false;
                             }
@@ -641,11 +640,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (black(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                            if (black(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY + i][beginmoveX + i] == empty))
+                            if (!(ChessMap[beginmoveY + i][beginmoveX + i] == empty))
                             {
                                 return false;
                             }
@@ -660,11 +659,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (black(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                            if (black(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY + i][beginmoveX - i] == empty))
+                            if (!(ChessMap[beginmoveY + i][beginmoveX - i] == empty))
                             {
                                 return false;
                             }
@@ -674,7 +673,7 @@ using namespace std;
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == whiterook)
+        if (ChessMap[beginmoveY][beginmoveX] == whiterook)
         {
             if (beginmoveX == endmoveX)//Y
             {
@@ -682,11 +681,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (black(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
+                        if (black(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY - i][beginmoveX] == empty))
+                        if (!(ChessMap[beginmoveY - i][beginmoveX] == empty))
                         {
                             return false;
                         }
@@ -697,11 +696,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (black(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
+                        if (black(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY + i][beginmoveX] == empty))
+                        if (!(ChessMap[beginmoveY + i][beginmoveX] == empty))
                         {
                             return false;
                         }
@@ -716,11 +715,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveX - endmoveX); i++)
                     {
-                        if (black(map[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
+                        if (black(ChessMap[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY][beginmoveX + i] == empty))
+                        if (!(ChessMap[beginmoveY][beginmoveX + i] == empty))
                         {
                             return false;
                         }
@@ -731,11 +730,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (black(map[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
+                        if (black(ChessMap[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY][beginmoveX - i] == empty))
+                        if (!(ChessMap[beginmoveY][beginmoveX - i] == empty))
                         {
                             return false;
                         }
@@ -744,7 +743,7 @@ using namespace std;
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == whitebishop)
+        if (ChessMap[beginmoveY][beginmoveX] == whitebishop)
         {
             if (beginmoveY > endmoveY)//Y+ 
             {
@@ -756,11 +755,11 @@ using namespace std;
                     }
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (black(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
+                        if (black(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY - i][beginmoveX + i] == empty))
+                        if (!(ChessMap[beginmoveY - i][beginmoveX + i] == empty))
                         {
                             return false;
                         }
@@ -775,11 +774,11 @@ using namespace std;
                     }
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (black(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY + i) == endmoveY)
+                        if (black(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY + i) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY - i][beginmoveX - i] == empty))
+                        if (!(ChessMap[beginmoveY - i][beginmoveX - i] == empty))
                         {
                             return false;
                         }
@@ -797,11 +796,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (black(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                        if (black(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY + i][beginmoveX + i] == empty))
+                        if (!(ChessMap[beginmoveY + i][beginmoveX + i] == empty))
                         {
                             return false;
                         }
@@ -816,11 +815,11 @@ using namespace std;
                     }
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (black(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                        if (black(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY + i][beginmoveX - i] == empty))
+                        if (!(ChessMap[beginmoveY + i][beginmoveX - i] == empty))
                         {
                             return false;
                         }
@@ -829,7 +828,7 @@ using namespace std;
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == whiteknight)
+        if (ChessMap[beginmoveY][beginmoveX] == whiteknight)
         {
             if ((abs(endmoveY - beginmoveY) == 2 && abs(endmoveX - beginmoveX) == 1) || (abs(endmoveY - beginmoveY) == 1 && abs(endmoveX - beginmoveX) == 2)) 
             {
@@ -838,27 +837,27 @@ using namespace std;
         }
         return false;
     }
-    bool chess::blackposible(string(&map)[8][8], int beginmoveY, int beginmoveX, int endmoveY, int endmoveX)
+    bool chess::blackposible(int beginmoveY, int beginmoveX, int endmoveY, int endmoveX)
     {
         if (beginmoveY == endmoveY && beginmoveX == endmoveX)
         {
             return false;
         }
-        if (black(map[endmoveY][endmoveX]))
+        if (black(ChessMap[endmoveY][endmoveX]))
         {
             return false;
         }
-        if (!black(map[beginmoveY][beginmoveX]))
+        if (!black(ChessMap[beginmoveY][beginmoveX]))
         {
             return false;
         }
-        if (map[beginmoveY][beginmoveX] == blackpawn)
+        if (ChessMap[beginmoveY][beginmoveX] == blackpawn)
         {
-            if (beginmoveY == 1 && map[beginmoveY + 1][beginmoveX] == empty && map[beginmoveY + 2][beginmoveX] == empty && beginmoveY + 2 == endmoveY && beginmoveX == endmoveX)
+            if (beginmoveY == 1 && ChessMap[beginmoveY + 1][beginmoveX] == empty && ChessMap[beginmoveY + 2][beginmoveX] == empty && beginmoveY + 2 == endmoveY && beginmoveX == endmoveX)
             {
                 return true;
             }
-            if (map[beginmoveY + 1][beginmoveX] == empty && beginmoveY + 1 == endmoveY && beginmoveX == endmoveX)//move
+            if (ChessMap[beginmoveY + 1][beginmoveX] == empty && beginmoveY + 1 == endmoveY && beginmoveX == endmoveX)//move
             {
                 if (beginmoveY == 6 && endmoveY == 7)
                 {
@@ -872,22 +871,22 @@ using namespace std;
                     switch (tempnum)
                     {
                     case 1:
-                        map[beginmoveY][beginmoveX] = blackqueen;
+                        ChessMap[beginmoveY][beginmoveX] = blackqueen;
                         return true;
                     case 2:
-                        map[beginmoveY][beginmoveX] = blackrook;
+                        ChessMap[beginmoveY][beginmoveX] = blackrook;
                         return true;
                     case 3:
-                        map[beginmoveY][beginmoveX] = blackbishop;
+                        ChessMap[beginmoveY][beginmoveX] = blackbishop;
                         return true;
                     case 4:
-                        map[beginmoveY][beginmoveX] = blackknight;
+                        ChessMap[beginmoveY][beginmoveX] = blackknight;
                         return true;
                     }
                 }
                 return true;
             }
-            if ((beginmoveY + 1 == endmoveY && (beginmoveX - 1 == endmoveX || beginmoveX + 1 == endmoveX)) && black(map[endmoveY][endmoveX]))//attack move
+            if ((beginmoveY + 1 == endmoveY && (beginmoveX - 1 == endmoveX || beginmoveX + 1 == endmoveX)) && black(ChessMap[endmoveY][endmoveX]))//attack move
             {
 
                 if (beginmoveY == 6 && endmoveY == 7)
@@ -903,26 +902,26 @@ using namespace std;
                     switch (tempnum)
                     {
                     case 1:
-                        map[beginmoveY][beginmoveX] = blackqueen;
+                        ChessMap[beginmoveY][beginmoveX] = blackqueen;
                         return true;
                     case 2:
-                        map[beginmoveY][beginmoveX] = blackrook;
+                        ChessMap[beginmoveY][beginmoveX] = blackrook;
                         return true;
                     case 3:
-                        map[beginmoveY][beginmoveX] = blackbishop;
+                        ChessMap[beginmoveY][beginmoveX] = blackbishop;
                         return true;
                     case 4:
-                        map[beginmoveY][beginmoveX] = blackknight;
+                        ChessMap[beginmoveY][beginmoveX] = blackknight;
                         return true;
                     }
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == blackking)
+        if (ChessMap[beginmoveY][beginmoveX] == blackking)
         {
             return abs(beginmoveY - endmoveY) <= 1 && abs(beginmoveX - endmoveX) <= 1;
         }
-        if (map[beginmoveY][beginmoveX] == blackqueen)
+        if (ChessMap[beginmoveY][beginmoveX] == blackqueen)
         {
             if (beginmoveY == endmoveY || beginmoveX == endmoveX)//rook move
             {
@@ -932,11 +931,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (white(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
+                            if (white(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY - i][beginmoveX] == empty))
+                            if (!(ChessMap[beginmoveY - i][beginmoveX] == empty))
                             {
                                 return false;
                             }
@@ -947,11 +946,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (white(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
+                            if (white(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY + i][beginmoveX] == empty))
+                            if (!(ChessMap[beginmoveY + i][beginmoveX] == empty))
                             {
                                 return false;
                             }
@@ -966,11 +965,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveX - endmoveX); i++)
                         {
-                            if (white(map[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
+                            if (white(ChessMap[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY][beginmoveX + i] == empty))
+                            if (!(ChessMap[beginmoveY][beginmoveX + i] == empty))
                             {
                                 return false;
                             }
@@ -981,11 +980,11 @@ using namespace std;
                     {
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (white(map[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
+                            if (white(ChessMap[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY][beginmoveX - i] == empty))
+                            if (!(ChessMap[beginmoveY][beginmoveX - i] == empty))
                             {
                                 return false;
                             }
@@ -1006,11 +1005,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (white(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
+                            if (white(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY - i][beginmoveX + i] == empty))
+                            if (!(ChessMap[beginmoveY - i][beginmoveX + i] == empty))
                             {
                                 return false;
                             }
@@ -1025,11 +1024,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (white(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
+                            if (white(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY - i][beginmoveX - i] == empty))
+                            if (!(ChessMap[beginmoveY - i][beginmoveX - i] == empty))
                             {
                                 return false;
                             }
@@ -1047,11 +1046,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (white(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                            if (white(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY + i][beginmoveX + i] == empty))
+                            if (!(ChessMap[beginmoveY + i][beginmoveX + i] == empty))
                             {
                                 return false;
                             }
@@ -1066,11 +1065,11 @@ using namespace std;
                         }
                         for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                         {
-                            if (white(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                            if (white(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                             {
                                 return true;
                             }
-                            if (!(map[beginmoveY + i][beginmoveX - i] == empty))
+                            if (!(ChessMap[beginmoveY + i][beginmoveX - i] == empty))
                             {
                                 return false;
                             }
@@ -1080,7 +1079,7 @@ using namespace std;
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == blackrook)
+        if (ChessMap[beginmoveY][beginmoveX] == blackrook)
         {
             if (beginmoveX == endmoveX)//Y
             {
@@ -1088,11 +1087,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (white(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
+                        if (white(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY - abs(beginmoveY - endmoveY)) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY - i][beginmoveX] == empty))
+                        if (!(ChessMap[beginmoveY - i][beginmoveX] == empty))
                         {
                             return false;
                         }
@@ -1103,11 +1102,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (white(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
+                        if (white(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX]) && (beginmoveY + abs(beginmoveY - endmoveY)) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY + i][beginmoveX] == empty))
+                        if (!(ChessMap[beginmoveY + i][beginmoveX] == empty))
                         {
                             return false;
                         }
@@ -1122,11 +1121,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveX - endmoveX); i++)
                     {
-                        if (white(map[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
+                        if (white(ChessMap[beginmoveY][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + abs(beginmoveX - endmoveX)) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY][beginmoveX + i] == empty))
+                        if (!(ChessMap[beginmoveY][beginmoveX + i] == empty))
                         {
                             return false;
                         }
@@ -1137,11 +1136,11 @@ using namespace std;
                 {
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (white(map[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
+                        if (white(ChessMap[beginmoveY][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX - abs(beginmoveX - endmoveX)) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY][beginmoveX - i] == empty))
+                        if (!(ChessMap[beginmoveY][beginmoveX - i] == empty))
                         {
                             return false;
                         }
@@ -1150,7 +1149,7 @@ using namespace std;
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == blackbishop)
+        if (ChessMap[beginmoveY][beginmoveX] == blackbishop)
         {
             if (beginmoveY > endmoveY)//Y+ 
             {
@@ -1162,11 +1161,11 @@ using namespace std;
                     }
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (white(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
+                        if (white(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY - i][beginmoveX + i] == empty))
+                        if (!(ChessMap[beginmoveY - i][beginmoveX + i] == empty))
                         {
                             return false;
                         }
@@ -1181,11 +1180,11 @@ using namespace std;
                     }
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (white(map[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
+                        if (white(ChessMap[beginmoveY - abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveY - i) == endmoveY)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY - i][beginmoveX - i] == empty))
+                        if (!(ChessMap[beginmoveY - i][beginmoveX - i] == empty))
                         {
                             return false;
                         }
@@ -1203,11 +1202,11 @@ using namespace std;
                     }
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (white(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                        if (white(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX + abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY + i][beginmoveX + i] == empty))
+                        if (!(ChessMap[beginmoveY + i][beginmoveX + i] == empty))
                         {
                             return false;
                         }
@@ -1222,11 +1221,11 @@ using namespace std;
                     }
                     for (int i = 1; i <= abs(beginmoveY - endmoveY); i++)
                     {
-                        if (white(map[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
+                        if (white(ChessMap[beginmoveY + abs(beginmoveY - endmoveY)][beginmoveX - abs(beginmoveX - endmoveX)]) && (beginmoveX + i) == endmoveX)
                         {
                             return true;
                         }
-                        if (!(map[beginmoveY + i][beginmoveX - i] == empty))
+                        if (!(ChessMap[beginmoveY + i][beginmoveX - i] == empty))
                         {
                             return false;
                         }
@@ -1235,7 +1234,7 @@ using namespace std;
                 }
             }
         }
-        if (map[beginmoveY][beginmoveX] == blackknight)
+        if (ChessMap[beginmoveY][beginmoveX] == blackknight)
         {
             if ((abs(endmoveY - beginmoveY) == 2 && abs(endmoveX - beginmoveX) == 1) || (abs(endmoveY - beginmoveY) == 1 && abs(endmoveX - beginmoveX) == 2))
             {

@@ -15,19 +15,20 @@ class chess
         whitepawn,whitepawn,whitepawn,whitepawn,whitepawn,whitepawn,whitepawn,whitepawn,
         whiterook,whiteknight,whitebishop,whitequeen,whiteking,whitebishop,whiteknight,whiterook
     };
+    bool can;
 public:
 	 chess();
-void menu();
-void game(string(&map)[8][8]);
-void mapgen(string(&map)[8][8]);
-void whitemove(string(&map)[8][8], bool& can);
-void blackmove(string(&map)[8][8], bool& can);
+void menu(); 
+void game();
+void mapgen();
+void whitemove();
+void blackmove();
 void history();
-bool WhiteKingExist(string map[8][8]);
-bool BlackKingExist(string map[8][8]);
+bool WhiteKingExist();
+bool BlackKingExist();
 bool white(string figure);
 bool black(string figure);
-bool whiteposible(string(&map)[8][8], int beginmoveY, int beginmoveX, int endmoveY, int endmoveX);
-bool blackposible(string(&map)[8][8], int beginmoveY, int beginmoveX, int endmoveY, int endmoveX);
+bool whiteposible(int beginmoveY, int beginmoveX, int endmoveY, int endmoveX);
+bool blackposible(int beginmoveY, int beginmoveX, int endmoveY, int endmoveX);
 
 };
